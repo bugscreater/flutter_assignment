@@ -57,18 +57,19 @@ class _HomeState extends State<Home> {
             Column(
               children: [
                 _searchBox(),
-                SizedBox(height: 25), // Add space between search box and the list
+                SizedBox(height: 25),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(top: 20), // Adjust the margin as needed
+                    margin: EdgeInsets.only(top: 20), 
+                    key: Key('todos list'),
                     child: ListView.builder(
                       itemCount: _filteredTodoList.length,
                       itemBuilder: (context, index) {
                         final todo = _filteredTodoList[index];
                         return TodoItem(
-                          key: Key('todo_item_$index'), // Assign a unique key based on the index
+                          key: Key('todo_item_$index'), 
                           todo: todo,
-                          onDelete: () => _deleteTodo(todo), // Pass the onDelete callback
+                          onDelete: () => _deleteTodo(todo),
                         );
                       },
                     ),
@@ -95,6 +96,7 @@ class _HomeState extends State<Home> {
 
   TextField _inputField() {
     return TextField(
+      key: Key('search_input_field'),
       controller: _searchController,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(0),
