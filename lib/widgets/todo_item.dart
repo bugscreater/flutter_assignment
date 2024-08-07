@@ -4,8 +4,13 @@ import 'package:todoapp/model/todo.dart';
 
 class TodoItem extends StatefulWidget {
   final ToDo todo;
+  final VoidCallback onDelete; 
 
-  const TodoItem({Key? key, required this.todo}) : super(key: key);
+  const TodoItem({
+    Key? key,
+    required this.todo,
+    required this.onDelete, 
+  }) : super(key: key);
 
   @override
   _TodoItemState createState() => _TodoItemState();
@@ -24,15 +29,20 @@ class _TodoItemState extends State<TodoItem> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
-      child: _listTile(todo: widget.todo, isDone: _isDone, onCheckboxChanged: _toggleCheckbox),
+      child: _listTile(
+        todo: widget.todo,
+        isDone: _isDone,
+        onCheckboxChanged: _toggleCheckbox,
+        onDelete: widget.onDelete, 
+      ),
     );
   }
 
-  void _toggleCheckbox(bool? newValue) { // Adjusted to accept bool? instead of bool
+  void _toggleCheckbox(bool? newValue) {
     if (newValue != null) {
       setState(() {
         _isDone = newValue;
-        widget.todo.toggleDone(); // Update the TodoItem's isDone status
+        widget.todo.toggleDone();
       });
     }
   }
@@ -41,13 +51,15 @@ class _TodoItemState extends State<TodoItem> {
 class _listTile extends StatelessWidget {
   final ToDo todo;
   final bool isDone;
-  final ValueChanged<bool?> onCheckboxChanged; // Adjusted to accept bool? instead of bool
+  final ValueChanged<bool?> onCheckboxChanged;
+  final VoidCallback onDelete; // Callback for delete action
 
   const _listTile({
     Key? key,
     required this.todo,
     required this.isDone,
     required this.onCheckboxChanged,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -55,14 +67,14 @@ class _listTile extends StatelessWidget {
     return ListTile(
       onTap: () {
         print('Clicked on todo item...');
-        onCheckboxChanged(!isDone); // Toggle the checkbox status
+        onCheckboxChanged(!isDone);
       },
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       tileColor: Colors.white,
       leading: Checkbox(
         value: isDone,
-        onChanged: onCheckboxChanged, // Pass the onCheckboxChanged function directly
+        onChanged: onCheckboxChanged,
         activeColor: tdBlue,
       ),
       title: Text(
@@ -83,7 +95,7 @@ class _listTile extends StatelessWidget {
           color: Colors.white,
           iconSize: 18,
           icon: Icon(Icons.delete),
-          onPressed: () {},
+          onPressed: onDelete, 
         ),
       ),
     );

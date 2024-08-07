@@ -38,6 +38,13 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _deleteTodo(ToDo todo) {
+    setState(() {
+      _filteredTodoList.remove(todo);
+      todoList.remove(todo);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +68,7 @@ class _HomeState extends State<Home> {
                         return TodoItem(
                           key: Key('todo_item_$index'), // Assign a unique key based on the index
                           todo: todo,
+                          onDelete: () => _deleteTodo(todo), // Pass the onDelete callback
                         );
                       },
                     ),
