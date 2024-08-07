@@ -3,9 +3,40 @@ import 'package:todoapp/constants/colors.dart';
 import 'package:todoapp/model/todo.dart';
 import 'package:todoapp/widgets/todo_item.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
-  final todoList = ToDo.todoList();
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final List<ToDo> todoList = ToDo.todoList();
+  final TextEditingController _searchController = TextEditingController();
+  List<ToDo> _filteredTodoList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredTodoList = todoList;
+    _searchController.addListener(_filterTodos);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterTodos);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterTodos() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredTodoList = todoList.where((todo) {
+        return todo.todoText!.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,20 +45,28 @@ class Home extends StatelessWidget {
       appBar: _buildAppBar(),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: Column(
+        child: Stack(
           children: [
-            _searchBox(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: todoList.length,
-                itemBuilder: (context, index) {
-                  final todo = todoList[index];
-                  return TodoItem(
-                    key: Key('todo_item_$index'), // Assign a unique key based on the index
-                    todo: todo,
-                  );
-                },
-              ),
+            Column(
+              children: [
+                _searchBox(),
+                SizedBox(height: 25), // Add space between search box and the list
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 20), // Adjust the margin as needed
+                    child: ListView.builder(
+                      itemCount: _filteredTodoList.length,
+                      itemBuilder: (context, index) {
+                        final todo = _filteredTodoList[index];
+                        return TodoItem(
+                          key: Key('todo_item_$index'), // Assign a unique key based on the index
+                          todo: todo,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -47,7 +86,8 @@ class Home extends StatelessWidget {
   }
 
   TextField _inputField() {
-    return const TextField(
+    return TextField(
+      controller: _searchController,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(0),
         prefixIcon: Icon(
@@ -75,16 +115,20 @@ class Home extends StatelessWidget {
     return AppBar(
       backgroundColor: tdBGColor,
       elevation: 0,
-      title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Icon(Icons.menu, color: tdBlack, size: 30),
-        Container(
-          height: 40,
-          width: 40,
-          child: ClipRRect(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(Icons.menu, color: tdBlack, size: 30),
+          Container(
+            height: 40,
+            width: 40,
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset('assets/images/avatar.png')),
-        ),
-      ]),
+              child: Image.asset('assets/images/avatar.png'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
