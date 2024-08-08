@@ -73,4 +73,5 @@ void main() {
 //   --driver=test_driver/perf_driver.dart \
 //   --target=integration_test/performance_test.dart \
 //   --profile \
-//   --write-sksl-on-exit=integration_test/results/scrolling_summary.sksl.json
+//   --write-sksl-on-exit=integration_test/results/performance_summary.sksl.json \
+//   --cache-sksl
