@@ -1,5 +1,9 @@
+Understood. Here’s the complete `README.md` file updated with instructions for cloning the repository, setting up the project, running the app, and performing integration testing:
+
+```markdown
 # todoapp
 
+A new Flutter project.
 
 ## Getting Started
 
@@ -21,42 +25,46 @@ samples, guidance on mobile development, and a full API reference.
 1. Clone the repository:
    ```bash
    git clone <repository-url>
+   ```
+   Replace `<repository-url>` with the URL of your repository.
 
+2. Navigate to the project directory:
+   ```bash
+   cd todoapp
+   ```
 
-Replace <repository-url> with the URL of your repository.
+3. Download and install the required Flutter packages:
+   ```bash
+   flutter pub get
+   ```
 
-Navigate to the project directory:
+### Running the App
 
-bash
-Copy code
-cd todoapp
-Download and install the required Flutter packages:
+1. Start an emulator or connect a device.
 
-bash
-Copy code
-flutter pub get
-Running the App
-Start an emulator or connect a device.
+2. Run the app in profile mode:
+   ```bash
+   flutter run --profile
+   ```
 
-Run the app in profile mode:
+### Running Integration Testing
 
-bash
-Copy code
-flutter run --profile
-Running Integration Testing
-Run the performance integration test:
+1. Run the performance integration test:
+   ```bash
+   flutter drive \
+     --driver=test_driver/perf_driver.dart \
+     --target=integration_test/performance_test.dart \
+     --profile \
+     --write-sksl-on-exit=integration_test/results/performance_summary.sksl.json \
+     --cache-sksl
+   ```
 
-bash
-Copy code
-flutter drive \
-  --driver=test_driver/perf_driver.dart \
-  --target=integration_test/performance_test.dart \
-  --profile \
-  --write-sksl-on-exit=integration_test/results/performance_summary.sksl.json \
-  --cache-sksl
-To get the performance timeline, run the following command:
+2. To get the performance timeline, run the following command:
+   ```bash
+   flutter drive -t lib/main.dart --driver test_driver/main_test.dart --profile
+   ```
 
-bash
-Copy code
-flutter drive -t lib/main.dart --driver test_driver/main_test.dart --profile
-The performance results will be saved in the build folder as ui_timeline.timeline.json. Open this file using Chrome Tracing to view the app performance report.
+3. The performance results will be saved in the `build` folder as `ui_timeline.timeline.json`. Open this file using [Chrome Tracing](chrome://tracing) to view the app performance report.
+```
+
+This `README.md` file includes all the steps you need to clone the repository, set up the project, and perform integration testing.
